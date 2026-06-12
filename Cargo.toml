@@ -7,7 +7,7 @@ readme = "README.md"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/vi-is-ramen/extrum/"
 description = "A macro for defining enum-like types with a specified underlying integer type."
-keywords = ["macro", "enum", "integer", "wrapper", "repr-transparent", "no-std"]
+keywords = ["macro", "enum", "conversion", "repr-transparent", "no-std"]
 
 [features]
 no_std = []
