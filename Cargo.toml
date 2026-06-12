@@ -1,0 +1,11 @@
+[package]
+name = "extrum"
+version = "0.1.0"
+edition = "2015"
+rust-version = "1.32.0"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/vi-is-ramen/extrum/"
+description = "A macro for defining enum-like types with a specified underlying integer type."
+
+[dependencies]
