@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "no_std", no_std)]
+
 //! # Extrum
 //!
 //! A macro for defining enum-like types with a specified underlying integer type.
@@ -126,9 +128,9 @@ macro_rules! extrum
             }
         }
 
-        impl std::fmt::Debug for $name
+        impl core::fmt::Debug for $name
         {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
             {
                 match self.0
                 {
