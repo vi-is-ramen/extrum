@@ -1,0 +1,97 @@
+   Compiling extrum v0.1.2 (/home/vi/Projects/crates/extum)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running unittests src/lib.rs (target/debug/deps/extrum-df50f1e459585bf5)
+
+running 19 tests
+test test::test_10 ... ok
+test test::test_1 ... ok
+test test::test_11 ... ok
+test test::test_13 ... ok
+test test::test_12 ... ok
+test test::test_15 ... ok
+test test::test_14 ... ok
+test test::test_16 ... ok
+test test::test_17 ... ok
+test test::test_18 ... ok
+test test::test_2 ... ok
+test test::test_3 ... ok
+test test::test_4 ... ok
+test test::test_5 ... ok
+test test::test_6 ... ok
+test test::test_7 ... ok
+test test::test_8 ... ok
+test test::test_9 ... ok
+test test::test_display ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests extrum
+
+running 3 tests
+test src/lib.rs - implement_display (line 176) ... FAILED
+test src/lib.rs - (line 14) ... ok
+test src/lib.rs - extrum (line 57) ... ok
+
+failures:
+
+---- src/lib.rs - implement_display (line 176) stdout ----
+error[E0774]: `derive` may only be applied to `struct`s, `enum`s and `union`s
+   --> src/lib.rs:180:1
+    |
+180 |   #[derive(PartialEq, Eq)]
+    |   ^^^^^^^^^^^^^^^^^^^^^^^^ not applicable here
+181 | / extrum! {
+182 | |     enum Color: u8 {
+183 | |         RED = 1,
+184 | |         GREEN = 2,
+185 | |     }
+186 | | }
+    | |_- not a `struct`, `enum` or `union`
+
+error[E0277]: can't compare `Color` with `Color`
+   --> src/lib.rs:181:1
+    |
+181 | / extrum! {
+182 | |     enum Color: u8 {
+183 | |         RED = 1,
+184 | |         GREEN = 2,
+185 | |     }
+186 | | }
+    | |_^ no implementation for `Color == Color`
+    |
+help: the trait `PartialEq<Color>` is not implemented for `Color`
+      but trait `PartialEq<u8>` is implemented for it
+   --> src/lib.rs:181:1
+    |
+181 | / extrum! {
+182 | |     enum Color: u8 {
+183 | |         RED = 1,
+184 | |         GREEN = 2,
+185 | |     }
+186 | | }
+    | |_^
+    = help: for that trait implementation, expected `u8`, found `Color`
+note: required by a bound in `Eq`
+   --> /home/vi/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:338:21
+    |
+338 | pub const trait Eq: [const] PartialEq<Self> + PointeeSized {
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `Eq`
+    = note: this error originates in the macro `extrum` (in Nightly builds, run with -Z macro-backtrace for more info)
+help: consider annotating `Color` with `#[derive(PartialEq)]`
+    |
+ 88 +         #[derive(PartialEq)]
+ 89 |         $vis struct $name($base_ty);
+    |
+
+error: aborting due to 2 previous errors
+
+Some errors have detailed explanations: E0277, E0774.
+For more information about an error, try `rustc --explain E0277`.
+Couldn't compile the test.
+
+failures:
+    src/lib.rs - implement_display (line 176)
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+error: doctest failed, to rerun pass `--doc`
