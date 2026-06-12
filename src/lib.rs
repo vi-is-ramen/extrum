@@ -90,59 +90,84 @@ macro_rules! extrum
         impl $name
         {
             $(
-                pub const $variant: Self = $name($value);
+                pub const $variant: Self = Self($value);
             )*
 
-            /// Creates a new instance from a raw underlying value.
+            #[inline(always)]
             pub const fn from_raw(value: $base_ty) -> Self
             {
-                $name(value)
+                Self(value)
             }
 
-            /// Returns the raw underlying value.
+            #[inline(always)]
             pub const fn into_raw(self) -> $base_ty
             {
                 self.0
             }
 
-            /// Returns the name of the variant as a string slice.
-            ///
-            /// If the raw value does not match any known variant, `"Unknown"` is returned.
+            #[inline(always)]
+            pub const fn is_known(&self) -> bool
+            {
+                false $(|| self.0 == $value)*
+            }
+
             pub fn name(&self) -> &'static str
             {
-                match self.0
-                {
-                    $($value => stringify!($variant),)*
-                    _ => "Unknown",
-                }
+                $(
+                    if self.0 == $value
+                    {
+                        return stringify!($variant);
+                    }
+                )*
+
+                "Unknown"
             }
         }
 
         impl From<$base_ty> for $name
         {
+            #[inline(always)]
             fn from(value: $base_ty) -> Self
             {
-                $name(value)
+                Self(value)
             }
         }
 
         impl From<$name> for $base_ty
         {
-            fn from(val: $name) -> Self
+            #[inline(always)]
+            fn from(value: $name) -> Self
             {
-                val.0
+                value.0
             }
         }
 
         impl core::fmt::Debug for $name
         {
-            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+            fn fmt(
+                &self,
+                f: &mut core::fmt::Formatter<'_>
+            ) -> core::fmt::Result
             {
-                match self.0
-                {
-                    $($value => f.write_str(concat!(stringify!($name), "::", stringify!($variant))),)*
-                    other => write!(f, "{}({})", stringify!($name), other),
-                }
+                $(
+                    if self.0 == $value
+                    {
+                        return f.write_str(
+                            concat!(
+                                stringify!($name),
+                                "::",
+                                stringify!($variant)
+                            )
+                        );
+                    }
+                )*
+
+                write!(
+                    f,
+                    "{}({})",
+                    stringify!($name),
+                    self.0
+                )
             }
         }
 
@@ -150,17 +175,19 @@ macro_rules! extrum
 
         impl PartialEq<$base_ty> for $name
         {
+            #[inline(always)]
             fn eq(&self, other: &$base_ty) -> bool
             {
-                &self.0 == other
+                self.0 == *other
             }
         }
 
         impl PartialEq<$name> for $base_ty
         {
+            #[inline(always)]
             fn eq(&self, other: &$name) -> bool
             {
-                self == &other.0
+                *self == other.0
             }
         }
     };
